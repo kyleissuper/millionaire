@@ -5,6 +5,9 @@
     .screen {
       display: none;
     }
+    #flash {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -13,6 +16,10 @@
       <button id="startGame">Play game</button>
     </div>
     <div id="mcq" class="screen">
+      <div id="flash">
+        <div id="closeMessage">X</div>
+        <h1 id="flashedMessage"></h1>
+      </div>
       <div id="lifelines">
         <button id="fifty">
           50/50
@@ -223,7 +230,6 @@
       useFifty() {
         lifelines.avail.fifty = false;
         document.querySelector("#fifty").removeEventListener("click", lifelines.clickHandler);
-        lifelines.refreshScreen();
         timer.stopped = true;
         let q = qna.getQuestion(game.currentQuestion);
         let otherIndex = Math.round(Math.random() * 2);
@@ -231,20 +237,33 @@
           otherIndex++;
         }
         for (let i = 0; i < 4; i++) {
-          console.log((q["rightIndex"]+1) + " " + (otherIndex+1));
           if (i === q["rightIndex"] || i === otherIndex) {
             document.querySelector("#answer" + (i+1)).classList.add("highlight");
           } else {
             document.querySelector("#answer" + (i+1)).classList.add("darken");
           }
         }
+        game.flashMessage("fifty", "Here's what we got!");
       },
       usePhone() {
+        lifelines.avail.phone = false;
+        document.querySelector("#phone").removeEventListener("click", lifelines.clickHandler);
+        timer.stopped = true;
+        let q = qna.getQuestion(game.currentQuestion);
+        let otherIndex = Math.round(Math.random() * 2);
+        if (otherIndex >= q["rightIndex"]) {
+          otherIndex++;
+        }
+        if (Math.random() > 0.5) {
+          document.querySelector("#answer" + (otherIndex+1)).classList.add("suggest");
+        } else {
+          document.querySelector("#answer" + (q["rightIndex"]+1)).classList.add("suggest");
+        }
+        game.flashMessage("phone", "Your friend thinks...");
       },
       useAudience() {
       }
     };
-    lifelines.init();
     const game = {
       init() {
         this.attachListeners();
@@ -275,6 +294,7 @@
       },
       playGame() {
         qna.init();
+        lifelines.init();
         game.currentQuestion = 1;
         game.canContinue = true;
         game.playQuestion(1);
@@ -341,6 +361,10 @@
             game.playGame();
           });
         });
+      },
+      flashMessage(messageType, message) {
+        // TODO: fix this
+        alert(message);
       }
     };
     game.init();
