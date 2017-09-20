@@ -135,6 +135,7 @@
         this.attachListeners();
         game.showScreen("#splashScreen");
       },
+      currentQuestion: 0,
       showScreen(screenId) {
         document.querySelectorAll(".screen").forEach(function(el) {
           el.style.display = "none";
@@ -155,10 +156,12 @@
       },
       playGame() {
         qna.init();
+        game.currentQuestion = 1;
         game.playQuestion(1);
       },
       attemptAnswer(a) {
-        console.log(a);
+        const answer = qna.attempt(game.currentQuestion, a);
+        console.log(answer);
       },
       attachListeners() {
         document.querySelector("#startGame").addEventListener("click", function(evt) {
@@ -169,7 +172,7 @@
           document.querySelector("#answer"+(i+1)).addEventListener("click", function(evt) {
             let tId = evt.target.parentElement.id;
             if (tId.slice(0,6) === "answer") {
-              console.log(tId.slice(6)*1);
+              game.attemptAnswer(tId.slice(6)*1-1);
             };
           });
         }
