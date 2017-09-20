@@ -1,107 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <style>
+    body { font-family: sans-serif }
+    .screen {
+      display: none;
+    }
+  </style>
+</head>
 <body>
-<script type="text/javascript">
-"use strict";
-{
-  function shuffle(a) {
-    for (let i = a.length; i; i--) {
-      let j = Math.floor(Math.random() * i);
-      [a[i - 1], a[j]] = [a[j], a[i - 1]];
-      return a;
+  <section id="game">
+    <div id="splashScreen" class="screen">
+      <button id="startGame">Play game</button>
+    </div>
+    <div id="mcq" class="screen">
+      <div id="question"></div>
+      <div id="answer1">
+        <span class="letter">A</span>
+        <span class="answer"></span>
+      </div>
+      <div id="answer2">
+        <span class="letter">B</span>
+        <span class="answer"></span>
+      </div>
+      <div id="answer3">
+        <span class="letter">C</span>
+        <span class="answer"></span>
+      </div>
+      <div id="answer4">
+        <span class="letter">D</span>
+        <span class="answer"></span>
+      </div>
+    </div>
+  </section>
+  <script type="text/javascript">
+  "use strict";
+  {
+    function shuffle(a) {
+      for (let i = a.length; i; i--) {
+        let j = Math.floor(Math.random() * i);
+        [a[i - 1], a[j]] = [a[j], a[i - 1]];
+        return a;
+      }
     }
-  }
-  const possibleQuestions = [
-    {
-      level: 1,
-      question: "In the children's book series, where is Paddington Bear originally from?",
-      wrongAnswers: [
-        "India",
-        "Canada",
-        "Iceland"
-      ],
-      rightAnswer: "Peru"
-    },
-    {
-      level: 1,
-      question: "What letter must appear at the beginning of the registration number of all non-military aircraft in the U.S.?",
-      wrongAnswers: [
-        "A",
-        "U",
-        "L"
-      ],
-      rightAnswer: "N"
-    },
-    {
-      level: 2,
-      question: "Who delivered the less famous two-hour speech that preceded Abraham Lincoln's two-minute Gettysburg Address?",
-      wrongAnswers: [
-        "Wendell Phillips",
-        "Daniel Webster",
-        "Robert G.Ingersoll"
-      ],
-      rightAnswer: "Edward Everett"
-    },
-    {
-      level: 2,
-      question: "'Nephelococcygia' is the practice of doing what?",
-      wrongAnswers: [
-        "Sleeping with your eyes open",
-        "Breaking glass with your voice",
-        "Swimming in freezing water"
-      ],
-      rightAnswer: "Finding shapes in clouds"
-    }
-  ];
-  // Screen manager --> Timer + Questions
-  // Score manager
-  const levels = 2;
-  const qna = {
-    init() {
-      this.loadQuestions(levels);
-    },
-    questions: [],
-    loadQuestions(levels) {
-      // assume possibleQuestions loaded
-      function oneForLevel(questions, level) {
-        let selectedQuestions = [];
-        questions.forEach((q) => {
-          if (q["level"] === level) {
-            selectedQuestions.push(q);
-          }
+    const possibleQuestions = [
+      {
+        level: 1,
+        question: "In the children's book series, where is Paddington Bear originally from?",
+        wrongAnswers: [
+          "India",
+          "Canada",
+          "Iceland"
+        ],
+        rightAnswer: "Peru"
+      },
+      {
+        level: 1,
+        question: "What letter must appear at the beginning of the registration number of all non-military aircraft in the U.S.?",
+        wrongAnswers: [
+          "A",
+          "U",
+          "L"
+        ],
+        rightAnswer: "N"
+      },
+      {
+        level: 2,
+        question: "Who delivered the less famous two-hour speech that preceded Abraham Lincoln's two-minute Gettysburg Address?",
+        wrongAnswers: [
+          "Wendell Phillips",
+          "Daniel Webster",
+          "Robert G.Ingersoll"
+        ],
+        rightAnswer: "Edward Everett"
+      },
+      {
+        level: 2,
+        question: "'Nephelococcygia' is the practice of doing what?",
+        wrongAnswers: [
+          "Sleeping with your eyes open",
+          "Breaking glass with your voice",
+          "Swimming in freezing water"
+        ],
+        rightAnswer: "Finding shapes in clouds"
+      }
+    ];
+    // Screen manager --> Timer + Questions
+    // Score manager
+    const levels = 2;
+    const qna = {
+      init() {
+        this.loadQuestions(levels);
+      },
+      questions: [],
+      loadQuestions(levels) {
+        // assume possibleQuestions loaded
+        function oneForLevel(questions, level) {
+          let selectedQuestions = [];
+          questions.forEach((q) => {
+            if (q["level"] === level) {
+              selectedQuestions.push(q);
+            }
+          });
+          let index = Math.floor(
+              Math.random() * selectedQuestions.length
+              );
+          return selectedQuestions[index];
+        }
+        for( let i = 1; i <= levels; i++ ) {
+          let q = oneForLevel(possibleQuestions, i);
+          q["rightIndex"] = Math.round(Math.random() * 4);
+          q["allAnswers"] = shuffle(q["wrongAnswers"].slice());
+          q["allAnswers"].splice(
+              q["rightIndex"],
+              0,
+              q["rightAnswer"]);
+          delete q["wrongAnswers"];
+          this.questions.push(q);
+        }
+      },
+      getQuestion(level) {
+        return this.questions[level-1];
+      },
+      attempt(level, answer) {
+        let q = this.getQuestion(level);
+        return {
+          result: answer === q["rightIndex"],
+          rightAnswer: q["rightAnswer"]
+        };
+      }
+    };
+    const game = {
+      init() {
+        this.attachListeners();
+        game.showScreen("#splashScreen");
+      },
+      showScreen(screenId) {
+        document.querySelectorAll(".screen").forEach(function(el) {
+          el.style.display = "none";
         });
-        let index = Math.floor(
-            Math.random() * selectedQuestions.length
-            );
-        return selectedQuestions[index];
+        document.querySelector(screenId).style.display = "block";
+      },
+      loadQuestion(q) {
+        document.querySelector("#question").innerText = q["question"];
+        for ( let i = 0; i < 4; i++ ) {
+          let ans = document.querySelector(
+            "#answer" + (i+1) + " .answer");
+          ans.innerText = q["allAnswers"][i];
+        }
+      },
+      playQuestion(level) {
+        let q = qna.getQuestion(level);
+        game.loadQuestion(q);
+      },
+      playGame() {
+        qna.init();
+        game.playQuestion(1);
+      },
+      attemptAnswer(a) {
+        console.log(a);
+      },
+      attachListeners() {
+        document.querySelector("#startGame").addEventListener("click", function(evt) {
+          game.playGame();
+          game.showScreen("#mcq");
+        });
+        for ( let i = 0; i < 4; i++ ) {
+          document.querySelector("#answer"+(i+1)).addEventListener("click", function(evt) {
+            let tId = evt.target.parentElement.id;
+            if (tId.slice(0,6) === "answer") {
+              console.log(tId.slice(6)*1);
+            };
+          });
+        }
       }
-      for( let i = 1; i <= levels; i++ ) {
-        let q = oneForLevel(possibleQuestions, i);
-        q["rightIndex"] = Math.round(Math.random() * 4);
-        q["allAnswers"] = shuffle(q["wrongAnswers"].slice());
-        q["allAnswers"].splice(
-            q["rightIndex"],
-            0,
-            q["rightAnswer"]);
-        delete q["wrongAnswers"];
-        this.questions.push(q);
-      }
-    },
-    getQuestion(level) {
-      return this.questions[level-1];
-    },
-    attempt(level, answer) {
-      let q = this.getQuestion(level);
-      return {
-        result: answer === q["rightIndex"],
-        rightAnswer: q["rightAnswer"]
-      };
-    }
+    };
+    game.init();
   };
-  qna.init();
-  console.log(qna.getQuestion(1));
-  console.log(qna.attempt(1, 0));
-};
-</script>
+  </script>
 </body>
 </html>
