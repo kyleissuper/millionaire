@@ -39,6 +39,18 @@
         continue
       </button>
     </div>
+    <div id="win" class="screen">
+      <h1>You win!</h1>
+      <button class="playAgain">
+        Play again
+      </button>
+    </div>
+    <div id="lose" class="screen">
+      <h1>You lose :(</h1>
+      <button class="playAgain">
+        Play again
+      </button>
+    </div>
   </section>
   <script type="text/javascript">
   "use strict";
@@ -161,6 +173,7 @@
       playQuestion(level) {
         let q = qna.getQuestion(level);
         game.loadQuestion(q);
+        game.showScreen("#mcq");
       },
       playGame() {
         qna.init();
@@ -168,13 +181,20 @@
         game.canContinue = true;
         game.playQuestion(1);
       },
+      win() {
+        game.showScreen("#win");
+      },
+      lose() {
+        game.showScreen("#lose");
+      },
       continue() {
         if (!(game.canContinue)) {
-          console.log("Lose :(");
+          game.lose();
         } else if (game.currentQuestion === levels) {
-          console.log("Win!");
+          game.win();
         } else {
-          console.log("Next question");
+          game.currentQuestion++;
+          game.playQuestion(game.currentQuestion);
         }
       },
       attemptAnswer(a) {
@@ -191,12 +211,10 @@
         }
         document.querySelector("#result").innerText = response;
         game.showScreen("#answer");
-        //console.log(response);
       },
       attachListeners() {
         document.querySelector("#startGame").addEventListener("click", function(evt) {
           game.playGame();
-          game.showScreen("#mcq");
         });
         for ( let i = 0; i < 4; i++ ) {
           document.querySelector("#answer"+(i+1)).addEventListener("click", function(evt) {
@@ -208,6 +226,11 @@
         }
         document.querySelector("#continue").addEventListener("click", function(evt) {
           game.continue();
+        });
+        document.querySelectorAll(".playAgain").forEach(function(el) {
+          el.addEventListener("click", function(evt) {
+            window.location.reload();
+          });
         });
       }
     };
