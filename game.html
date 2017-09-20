@@ -301,7 +301,7 @@
       },
       useFifty() {
         lifelines.avail.fifty = false;
-        lifelines.refreshScreen();
+        document.querySelector("#fifty").classList.add("eliminated");
         document.querySelector("#fifty").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
         let q = qna.getQuestion(game.currentQuestion);
@@ -320,7 +320,7 @@
       },
       usePhone() {
         lifelines.avail.phone = false;
-        lifelines.refreshScreen();
+        document.querySelector("#phone").classList.add("eliminated");
         document.querySelector("#phone").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
         let q = qna.getQuestion(game.currentQuestion);
@@ -344,7 +344,7 @@
           return rand / 6;
         }
         lifelines.avail.audience = false;
-        lifelines.refreshScreen();
+        document.querySelector("#audience").classList.add("eliminated");
         document.querySelector("#audience").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
         let q = qna.getQuestion(game.currentQuestion);
