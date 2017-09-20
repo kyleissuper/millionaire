@@ -114,6 +114,7 @@
       questions: [],
       loadQuestions(levels) {
         // assume possibleQuestions loaded
+        this.questions = [];
         function oneForLevel(questions, level) {
           let selectedQuestions = [];
           questions.forEach((q) => {
@@ -127,16 +128,16 @@
           return selectedQuestions[index];
         }
         for( let i = 1; i <= levels; i++ ) {
-          let q = oneForLevel(possibleQuestions, i);
+          let q = oneForLevel(possibleQuestions.slice(), i);
           q["rightIndex"] = Math.round(Math.random() * 4);
           q["allAnswers"] = shuffle(q["wrongAnswers"].slice());
           q["allAnswers"].splice(
               q["rightIndex"],
               0,
               q["rightAnswer"]);
-          delete q["wrongAnswers"];
           this.questions.push(q);
         }
+        console.log(this.questions);
       },
       getQuestion(level) {
         return this.questions[level-1];
@@ -229,7 +230,7 @@
         });
         document.querySelectorAll(".playAgain").forEach(function(el) {
           el.addEventListener("click", function(evt) {
-            window.location.reload();
+            game.playGame();
           });
         });
       }
