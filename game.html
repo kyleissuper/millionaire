@@ -140,7 +140,7 @@
         }
         for( let i = 1; i <= levels; i++ ) {
           let q = oneForLevel(possibleQuestions.slice(), i);
-          q["rightIndex"] = Math.round(Math.random() * 4);
+          q["rightIndex"] = Math.round(Math.random() * 3);
           q["allAnswers"] = shuffle(q["wrongAnswers"].slice());
           q["allAnswers"].splice(
               q["rightIndex"],
@@ -163,19 +163,15 @@
     const timer = {
       t: 0,
       stopped: true,
-      paused: false,
       start(seconds, callback) {
         timer.t = seconds;
         timer.stopped = false;
+        document.querySelector("#timer").innerText = "";
         let countDown = setInterval(function() {
           if (timer.stopped) {
             clearInterval(countDown);
-            document.querySelector("#timer").innerText = "";
-          } else if (timer.paused) {
-            // Do nothing
           } else if (timer.t === 0) {
             clearInterval(countDown);
-            document.querySelector("#timer").innerText = "";
             callback("t");
           } else {
             document.querySelector("#timer").innerText = timer.t;
@@ -190,8 +186,25 @@
           fifty: true,
           phone: true,
           audience: true
-        }
+        };
         lifelines.refreshScreen();
+        ["fifty", "phone", "audience"].forEach(function(li) {
+          let el = document.querySelector("#"+li);
+          el.addEventListener("click", lifelines.clickHandler);
+        });
+      },
+      clickHandler(evt) {
+        switch (evt.target.id) {
+          case "fifty":
+            lifelines.useFifty();
+            break;
+          case "phone":
+            lifelines.usePhone();
+            break;
+          case "audience":
+            lifelines.useAudience();
+            break;
+        }
       },
       refreshScreen() {
         ["fifty", "phone", "audience"].forEach(function(li) {
@@ -202,6 +215,33 @@
             el.classList.add("eliminated");
           }
         });
+        for (let i = 0; i < 4; i++) {
+          document.querySelector("#answer" + (i+1)).classList.remove("highlight");
+          document.querySelector("#answer" + (i+1)).classList.remove("darken");
+        }
+      },
+      useFifty() {
+        lifelines.avail.fifty = false;
+        document.querySelector("#fifty").removeEventListener("click", lifelines.clickHandler);
+        lifelines.refreshScreen();
+        timer.stopped = true;
+        let q = qna.getQuestion(game.currentQuestion);
+        let otherIndex = Math.round(Math.random() * 2);
+        if (otherIndex >= q["rightIndex"]) {
+          otherIndex++;
+        }
+        for (let i = 0; i < 4; i++) {
+          console.log((q["rightIndex"]+1) + " " + (otherIndex+1));
+          if (i === q["rightIndex"] || i === otherIndex) {
+            document.querySelector("#answer" + (i+1)).classList.add("highlight");
+          } else {
+            document.querySelector("#answer" + (i+1)).classList.add("darken");
+          }
+        }
+      },
+      usePhone() {
+      },
+      useAudience() {
       }
     };
     lifelines.init();
@@ -219,6 +259,7 @@
         document.querySelector(screenId).style.display = "block";
       },
       loadQuestion(q) {
+        lifelines.refreshScreen();
         document.querySelector("#question").innerText = q["question"];
         for ( let i = 0; i < 4; i++ ) {
           let ans = document.querySelector(
