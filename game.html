@@ -129,19 +129,21 @@
       <div id="timer"></div>
     </div>
     <div id="answer" class="screen">
-      <div id="result">
-      </div>
+      <div class="level"></div>
+      <div id="result"></div>
       <button id="continue">
         continue
       </button>
     </div>
     <div id="win" class="screen">
+      <div class="level"></div>
       <h1>You win!</h1>
       <button class="playAgain">
         Play again
       </button>
     </div>
     <div id="lose" class="screen">
+      <div class="level"></div>
       <h1>You lose :(</h1>
       <button class="playAgain">
         Play again
@@ -404,6 +406,7 @@
         game.playQuestion(1);
       },
       win() {
+        game.updateLevel();
         game.showScreen("#win");
       },
       lose() {
@@ -413,14 +416,26 @@
         if (!(game.canContinue)) {
           game.lose();
         } else if (game.currentQuestion === levels) {
-          game.win();
+          game.win(game.currentQuestion);
         } else {
           game.currentQuestion++;
           game.playQuestion(game.currentQuestion);
         }
       },
+      updateLevel() {
+        let messages = {
+          1: "Level 1: Novice",
+          2: "Level 2: Learner",
+          3: "Level 3: Expert",
+          4: "Level 4: Master"
+        };
+        document.querySelectorAll(".level").forEach(function(el) {
+          el.innerText = messages[game.currentQuestion];
+        });
+      },
       attemptAnswer(a) {
         const answer = qna.attempt(game.currentQuestion, a);
+        game.updateLevel();
         let response = "";
         if (a === "t") {
           response = "Time's up! That answer is " +
