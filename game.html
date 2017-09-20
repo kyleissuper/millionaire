@@ -24,7 +24,6 @@
           Audience
         </button>
       </div>
-      <div id="timer"></div>
       <div id="question"></div>
       <div id="answer1">
         <span class="letter">A</span>
@@ -42,6 +41,7 @@
         <span class="letter">D</span>
         <span class="answer"></span>
       </div>
+      <div id="timer"></div>
     </div>
     <div id="answer" class="screen">
       <div id="result">
@@ -163,6 +163,7 @@
     const timer = {
       t: 0,
       stopped: true,
+      paused: false,
       start(seconds, callback) {
         timer.t = seconds;
         timer.stopped = false;
@@ -170,6 +171,8 @@
           if (timer.stopped) {
             clearInterval(countDown);
             document.querySelector("#timer").innerText = "";
+          } else if (timer.paused) {
+            // Do nothing
           } else if (timer.t === 0) {
             clearInterval(countDown);
             document.querySelector("#timer").innerText = "";
