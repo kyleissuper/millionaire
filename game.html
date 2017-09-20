@@ -125,7 +125,7 @@
       attempt(level, answer) {
         let q = this.getQuestion(level);
         return {
-          result: answer === q["rightIndex"],
+          correct: answer === q["rightIndex"],
           rightAnswer: q["rightAnswer"]
         };
       }
@@ -161,7 +161,15 @@
       },
       attemptAnswer(a) {
         const answer = qna.attempt(game.currentQuestion, a);
-        console.log(answer);
+        let response = "";
+        if (answer["correct"]) {
+          response = "That's right! That answer is " +
+            answer["rightAnswer"] + "!"
+        } else {
+          response = "That's wrong! That answer is " +
+            answer["rightAnswer"] + "."
+        }
+        console.log(response);
       },
       attachListeners() {
         document.querySelector("#startGame").addEventListener("click", function(evt) {
