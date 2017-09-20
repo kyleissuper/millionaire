@@ -49,6 +49,9 @@
     .suggest {
       border: 2px solid #f00;
     }
+    .eliminated {
+      background: #111;
+    }
   </style>
 </head>
 <body>
@@ -298,6 +301,7 @@
       },
       useFifty() {
         lifelines.avail.fifty = false;
+        lifelines.refreshScreen();
         document.querySelector("#fifty").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
         let q = qna.getQuestion(game.currentQuestion);
@@ -316,6 +320,7 @@
       },
       usePhone() {
         lifelines.avail.phone = false;
+        lifelines.refreshScreen();
         document.querySelector("#phone").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
         let q = qna.getQuestion(game.currentQuestion);
@@ -339,6 +344,7 @@
           return rand / 6;
         }
         lifelines.avail.audience = false;
+        lifelines.refreshScreen();
         document.querySelector("#audience").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
         let q = qna.getQuestion(game.currentQuestion);
