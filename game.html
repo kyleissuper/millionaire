@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <style> body { font-family: sans-serif }
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif }
     .screen {
       display: none;
     }
     #flash {
       display: none;
+    }
+    #game, #game * {
+      border: 1px solid #000;
+    }
+    #game, .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 300px;
+      height: 500px;
+    }
+    #audienceResults {
+      position: absolute;
+      top: 300px;
+      left: 0;
+      display: none;
+      width: 200px;
+      height: 200px;
+    }
+    .letter {
+      display: inline-block;
+      width: 30px;
+      height: 20px;
+    }
+    .barContainer {
+      display: inline-block;
+      width: 140px;
+      height: 20px;
+    }
+    .bar {
+      background: #f00;
+      width: 90%;
+      height: 100%;
     }
   </style>
 </head>
@@ -19,6 +55,32 @@
       <div id="flash">
         <div id="closeMessage">X</div>
         <h1 id="flashedMessage"></h1>
+      </div>
+      <div id="audienceResults">
+        <div id="audience1">
+          <span class="letter">A</span>
+          <div class="barContainer">
+            <div class="bar"></div>
+          </div>
+        </div>
+        <div id="audience2">
+          <span class="letter">B</span>
+          <div class="barContainer">
+            <div class="bar"></div>
+          </div>
+        </div>
+        <div id="audience3">
+          <span class="letter">C</span>
+          <div class="barContainer">
+            <div class="bar"></div>
+          </div>
+        </div>
+        <div id="audience4">
+          <span class="letter">D</span>
+          <div class="barContainer">
+            <div class="bar"></div>
+          </div>
+        </div>
       </div>
       <div id="lifelines">
         <button id="fifty">
@@ -214,6 +276,7 @@
         }
       },
       refreshScreen() {
+        document.querySelector("#audienceResults").style.display = "none";
         ["fifty", "phone", "audience"].forEach(function(li) {
           let el = document.querySelector("#"+li);
           if (lifelines.avail[li]) {
@@ -262,6 +325,27 @@
         game.flashMessage("phone", "Your friend thinks...");
       },
       useAudience() {
+        function gaussianRand() {
+          let rand = 0;
+          for (let i = 0; i < 6; i += 1) {
+            rand += Math.random();
+          }
+          return rand / 6;
+        }
+        lifelines.avail.audience = false;
+        document.querySelector("#audience").removeEventListener("click", lifelines.clickHandler);
+        timer.stopped = true;
+        let q = qna.getQuestion(game.currentQuestion);
+        for ( let i = 0; i < 4; i++ ) {
+          let percent = gaussianRand();
+          if ((i) !== q["rightIndex"]) {
+            percent = percent * 0.7;
+          }
+          document.querySelector(
+            "#audience" + (i+1) + " .bar").style.width = Math.round(percent * 100) + "%";
+        }
+        document.querySelector("#audienceResults").style.display = "block";
+        game.flashMessage("audience", "These are the audience results!");
       }
     };
     const game = {
