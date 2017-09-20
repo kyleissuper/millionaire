@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <style>
-    body { font-family: sans-serif }
+  <style> body { font-family: sans-serif }
     .screen {
       display: none;
     }
@@ -14,6 +13,7 @@
       <button id="startGame">Play game</button>
     </div>
     <div id="mcq" class="screen">
+      <div id="timer"></div>
       <div id="question"></div>
       <div id="answer1">
         <span class="letter">A</span>
@@ -149,6 +149,27 @@
         };
       }
     };
+    const timer = {
+      t: 0,
+      stopped: true,
+      start(seconds, callback) {
+        timer.t = seconds;
+        timer.stopped = false;
+        let countDown = setInterval(function() {
+          if (timer.stopped) {
+            clearInterval(countDown);
+            document.querySelector("#timer").innerText = "";
+          } else if (timer.t === 0) {
+            clearInterval(countDown);
+            document.querySelector("#timer").innerText = "";
+            callback("t");
+          } else {
+            document.querySelector("#timer").innerText = timer.t;
+            timer.t--;
+          }
+        }, seconds*100);
+      }
+    };
     const game = {
       init() {
         this.attachListeners();
@@ -171,6 +192,7 @@
         }
       },
       playQuestion(level) {
+        timer.start(10, game.attemptAnswer);
         let q = qna.getQuestion(level);
         game.loadQuestion(q);
         game.showScreen("#mcq");
@@ -200,17 +222,28 @@
       attemptAnswer(a) {
         const answer = qna.attempt(game.currentQuestion, a);
         let response = "";
-        if (answer["correct"]) {
-          response = "That's right! That answer is " +
+        if (a === "t") {
+          response = "Time's up! That answer is " +
             answer["rightAnswer"] + "!"
-          game.canContinue = true;
-        } else {
-          response = "That's wrong! That answer is " +
-            answer["rightAnswer"] + "."
+          document.querySelector("#result").innerText = response;
           game.canContinue = false;
+          game.showScreen("#answer");
+        } else {
+          timer.stopped = true;
+          if (answer["correct"]) {
+            response = "That's right! That answer is " +
+              answer["rightAnswer"] + "!"
+            document.querySelector("#result").innerText = response;
+            game.canContinue = true;
+            game.showScreen("#answer");
+          } else {
+            response = "That's wrong! That answer is " +
+              answer["rightAnswer"] + "."
+            document.querySelector("#result").innerText = response;
+            game.canContinue = false;
+            game.showScreen("#answer");
+          }
         }
-        document.querySelector("#result").innerText = response;
-        game.showScreen("#answer");
       },
       attachListeners() {
         document.querySelector("#startGame").addEventListener("click", function(evt) {
