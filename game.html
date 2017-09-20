@@ -3,15 +3,24 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: sans-serif }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
     .screen {
       display: none;
     }
     #flash {
       display: none;
     }
-    #game, .screen {
-      position: absolute;
+    #game {
+      display: inline-block;
+      text-align: left;
+      width: 300px;
+      height: 500px;
+      border: 1px solid #000;
+    }
+    .screen {
       top: 0;
       left: 0;
       display: block;
@@ -19,7 +28,6 @@
       height: 500px;
     }
     #audienceResults {
-      position: absolute;
       top: 300px;
       left: 0;
       display: none;
