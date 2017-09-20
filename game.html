@@ -32,6 +32,13 @@
         <span class="answer"></span>
       </div>
     </div>
+    <div id="answer" class="screen">
+      <div id="result">
+      </div>
+      <button id="continue">
+        continue
+      </button>
+    </div>
   </section>
   <script type="text/javascript">
   "use strict";
@@ -136,6 +143,7 @@
         game.showScreen("#splashScreen");
       },
       currentQuestion: 0,
+      canContinue: true,
       showScreen(screenId) {
         document.querySelectorAll(".screen").forEach(function(el) {
           el.style.display = "none";
@@ -157,7 +165,17 @@
       playGame() {
         qna.init();
         game.currentQuestion = 1;
+        game.canContinue = true;
         game.playQuestion(1);
+      },
+      continue() {
+        if (!(game.canContinue)) {
+          console.log("Lose :(");
+        } else if (game.currentQuestion === levels) {
+          console.log("Win!");
+        } else {
+          console.log("Next question");
+        }
       },
       attemptAnswer(a) {
         const answer = qna.attempt(game.currentQuestion, a);
@@ -165,11 +183,15 @@
         if (answer["correct"]) {
           response = "That's right! That answer is " +
             answer["rightAnswer"] + "!"
+          game.canContinue = true;
         } else {
           response = "That's wrong! That answer is " +
             answer["rightAnswer"] + "."
+          game.canContinue = false;
         }
-        console.log(response);
+        document.querySelector("#result").innerText = response;
+        game.showScreen("#answer");
+        //console.log(response);
       },
       attachListeners() {
         document.querySelector("#startGame").addEventListener("click", function(evt) {
@@ -184,6 +206,9 @@
             };
           });
         }
+        document.querySelector("#continue").addEventListener("click", function(evt) {
+          game.continue();
+        });
       }
     };
     game.init();
