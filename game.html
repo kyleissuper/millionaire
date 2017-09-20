@@ -13,6 +13,17 @@
       <button id="startGame">Play game</button>
     </div>
     <div id="mcq" class="screen">
+      <div id="lifelines">
+        <button id="fifty">
+          50/50
+        </button>
+        <button id="phone">
+          Phone a friend
+        </button>
+        <button id="audience">
+          Audience
+        </button>
+      </div>
       <div id="timer"></div>
       <div id="question"></div>
       <div id="answer1">
@@ -170,6 +181,27 @@
         }, seconds*100);
       }
     };
+    const lifelines = {
+      init() {
+        lifelines.avail = {
+          fifty: true,
+          phone: true,
+          audience: true
+        }
+        lifelines.refreshScreen();
+      },
+      refreshScreen() {
+        ["fifty", "phone", "audience"].forEach(function(li) {
+          let el = document.querySelector("#"+li);
+          if (lifelines.avail[li]) {
+            el.classList.remove("eliminated");
+          } else {
+            el.classList.add("eliminated");
+          }
+        });
+      }
+    };
+    lifelines.init();
     const game = {
       init() {
         this.attachListeners();
