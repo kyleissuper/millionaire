@@ -108,6 +108,19 @@
     #audienceResults {
       display: none;
     }
+    /* Win/lose styles */
+    #win h1 {
+      text-shadow: 0 0 15px #fffcad;
+    }
+    #win .image {
+      box-shadow: 0 0 100px #fffcad;
+    }
+    #lose h1 {
+      text-shadow: 0 0 15px #f00;
+    }
+    #lose .image {
+      box-shadow: 0 0 100px #f00;
+    }
     /* Set visible game 'components' as blocks */
     .answerContainer,
     #question,
@@ -369,7 +382,7 @@
     <div id="lose" class="screen">
       <div class="level"></div>
       <div class="image"></div>
-      <h1>You lose :(</h1>
+      <h1>Give it another go?</h1>
       <button class="playAgain button">
         Play again
       </button>
