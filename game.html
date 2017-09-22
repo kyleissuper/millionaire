@@ -18,10 +18,7 @@
       -o-user-select: none;
     }
     /* Change cursor on clickables */
-    #answer1,
-    #answer2,
-    #answer3,
-    #answer4,
+    .answerContainer,
     button {
       cursor: pointer;
     }
@@ -32,10 +29,7 @@
       display: none;
     }
     /* Set visible game 'components' as blocks */
-    #answer1,
-    #answer2,
-    #answer3,
-    #answer4,
+    .answerContainer,
     #question,
     #timer,
     #lifelines,
@@ -43,61 +37,12 @@
       position: absolute;
       display: block;
     }
-    #answer1,
-    #answer2,
-    #answer3,
-    #answer4,
+    .answerContainer,
     #question,
     #lifelines > div,
     #audienceResults {
       border: 3px solid #fff;
       background: #203497;
-    }
-    /* Game elements */
-    #audienceResults {
-      top: 50px;
-      width: 200px;
-      height: 100px;
-    }
-    #lifelines {
-      left: 50%;
-      top: 10px;
-      margin-left: 70px;
-      height: 200px;
-      width: 80px;
-    }
-    #question,
-    #answer1,
-    #answer2,
-    #answer3,
-    #answer4 {
-      width: 270px;
-      padding: 2px 15px;
-      display: flex;
-      align-items: center;
-      border-width: 2px;
-    }
-    #question {
-      top: 200px;
-      height: 70px;
-    }
-    #answer1,
-    #answer2,
-    #answer3,
-    #answer4 {
-      height: 30px;
-    }
-    #answer1 {
-      top: 280px;
-    }
-    #answer2 {
-      top: 320px;
-    }
-    #answer3 {
-      top: 360px;
-    }
-    #answer4 {
-      top: 400px;
     }
     /* Game */
     #game {
@@ -117,6 +62,7 @@
     .letter {
       display: inline-block;
       color: #d89100;
+      padding-right: 5px;
     }
     .barContainer {
       display: inline-block;
@@ -128,17 +74,81 @@
       width: 90%;
       height: 100%;
     }
-    .highlight {
+    .answerContainer:hover {
+      background: #d89100;
+    }
+    .answerContainer:hover .letter {
+      color: #fff;
     }
     .darken {
-      background: #333;
+      background: #0f2174;
+    }
+    .darken .answer {
+      display: none;
     }
     .suggest {
-      border: 2px solid #f00;
+      border-color: #d89100;
     }
     .eliminated {
       background: #111;
       cursor: default;
+    }
+    /* Game elements */
+    #audienceResults {
+      top: 50px;
+      width: 200px;
+      height: 100px;
+    }
+    #lifelines {
+      left: 50%;
+      top: 10px;
+      margin-left: 70px;
+      height: 200px;
+      width: 80px;
+    }
+    #question,
+    .answerContainer {
+      width: 266px;
+      padding: 2px 15px;
+      display: flex;
+      align-items: center;
+      border-width: 2px;
+    }
+    #question {
+      top: 200px;
+      height: 70px;
+    }
+    .answerContainer {
+      height: 30px;
+    }
+    #answer1 {
+      top: 290px;
+    }
+    #answer2 {
+      top: 335px;
+    }
+    #answer3 {
+      top: 380px;
+    }
+    #answer4 {
+      top: 425px;
+    }
+    #timer {
+      top: 20px;
+      left: 50%;
+      margin-left: -100px;
+      display: flex;
+      font-size: 55px;
+      width: 150px;
+      height: 150px;
+      border: 6px solid #fff;
+      border-radius: 78px;
+      align-items: center;
+      justify-content: center;
+    }
+    #timer.stopped {
+      border-color: #333;
+      color: #333;
     }
   </style>
 </head>
@@ -179,31 +189,31 @@
         </div>
       </div>
       <div id="lifelines">
-        <button id="fifty">
+        <button id="fifty" class="lifeline">
           50/50
         </button>
-        <button id="phone">
+        <button id="phone" class="lifeline">
           Phone a friend
         </button>
-        <button id="audience">
+        <button id="audience" class="lifeline">
           Audience
         </button>
       </div>
       <div id="question"></div>
-      <div id="answer1">
-        <span class="letter">A</span>
+      <div id="answer1" class="answerContainer">
+        <span class="letter">A:</span>
         <span class="answer"></span>
       </div>
-      <div id="answer2">
-        <span class="letter">B</span>
+      <div id="answer2" class="answerContainer">
+        <span class="letter">B:</span>
         <span class="answer"></span>
       </div>
-      <div id="answer3">
-        <span class="letter">C</span>
+      <div id="answer3" class="answerContainer">
+        <span class="letter">C:</span>
         <span class="answer"></span>
       </div>
-      <div id="answer4">
-        <span class="letter">D</span>
+      <div id="answer4" class="answerContainer">
+        <span class="letter">D:</span>
         <span class="answer"></span>
       </div>
       <div id="timer"></div>
@@ -333,10 +343,13 @@
       start(seconds, callback) {
         timer.t = seconds;
         timer.stopped = false;
-        document.querySelector("#timer").innerText = "";
+        document.querySelector("#timer").innerText = timer.t;
+        timer.t--;
+        document.querySelector("#timer").classList.remove("stopped");
         let countDown = setInterval(function() {
           if (timer.stopped) {
             clearInterval(countDown);
+            document.querySelector("#timer").classList.add("stopped");
           } else if (timer.t === 0) {
             clearInterval(countDown);
             callback("t");
@@ -565,7 +578,7 @@
       },
       flashMessage(messageType, message) {
         // TODO: fix this
-        alert(message);
+        //alert(message);
       }
     };
     game.init();
