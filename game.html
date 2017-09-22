@@ -9,6 +9,21 @@
       text-align: center;
       background: #000;
       color: #fff;
+      /* Make text unselectable */
+      cursor: default;
+      user-select: none;
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      -o-user-select: none;
+    }
+    /* Change cursor on clickables */
+    #answer1,
+    #answer2,
+    #answer3,
+    #answer4,
+    button {
+      cursor: pointer;
     }
     /* Hide */
     .screen,
@@ -57,13 +72,13 @@
     #answer3,
     #answer4 {
       width: 270px;
-      padding: 0 15px;
+      padding: 2px 15px;
       display: flex;
       align-items: center;
       border-width: 2px;
     }
     #question {
-      top: 210px;
+      top: 200px;
       height: 70px;
     }
     #answer1,
@@ -76,13 +91,13 @@
       top: 280px;
     }
     #answer2 {
-      top: 310px;
+      top: 320px;
     }
     #answer3 {
-      top: 340px;
+      top: 360px;
     }
     #answer4 {
-      top: 370px;
+      top: 400px;
     }
     /* Game */
     #game {
@@ -123,6 +138,7 @@
     }
     .eliminated {
       background: #111;
+      cursor: default;
     }
   </style>
 </head>
