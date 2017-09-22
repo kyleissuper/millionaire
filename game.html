@@ -9,6 +9,9 @@
       font-weight: bold;
       text-align: center;
       background: #000;
+      background-image: url("background.png");
+      background-repeat: no-repeat;
+      background-position: center top;
       color: #fff;
       /* Make text unselectable */
       cursor: default;
@@ -17,6 +20,81 @@
       -khtml-user-select: none;
       -webkit-user-select: none;
       -o-user-select: none;
+    }
+    /* Image backgrounds */
+    .image {
+      display: block;
+      width: 300px;
+      height: 300px;
+      background-image: url("resultImages.png");
+    }
+    .correct .image {
+      background-position: 0 -300px;
+    }
+    #win .image {
+      background-position: 0 -600px;
+    }
+    #lose .image {
+      background-position: 0 -900px;
+    }
+    /* Buttons */
+    .button {
+      background-color: #203598;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 10px 22px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .button:hover {
+      background: #d89100;
+    }
+    /* Shadows */
+    #splashScreen h1,
+    #timer {
+      box-shadow: 0 0 8px 0 rgba(66, 199, 255, 0.5), 0 0 20px 0 rgba(66, 199, 255, 0.5);
+      text-shadow: 0 0 10px rgba(66, 199, 255, 0.5), 0 0 10px rgba(66, 199, 255, 0.5), 0 0 10px rgba(66, 199, 255, 0.5);
+    }
+    /* Alignment */
+    #splashScreen,
+    #answer,
+    #win,
+    #lose {
+      text-align: center;
+    }
+    /* Splash screen */
+    #splashScreen h1 {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      width: 250px;
+      height: 250px;
+      border-radius: 150px;
+      border: 20px solid #38004d;
+      background: #1c153a;
+      text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    }
+    /* Other elements */
+    #answer .correct {
+      color: #36f995;
+    }
+    #answer .wrong {
+      color: #d89100;
+    }
+    .level {
+      background-color: #d89100;
+      text-transform: uppercase;
+      width: 100%;
+      color: #000;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      font-weight: bold;
     }
     /* Change cursor on clickables */
     .answerContainer,
@@ -53,7 +131,6 @@
       text-align: left;
       width: 300px;
       height: 500px;
-      border: 1px solid #fff;
     }
     .screen {
       top: 0;
@@ -96,7 +173,7 @@
     }
     /* Game elements */
     #audienceResults {
-      top: 40px;
+      top: 70px;
       left: 50%;
       margin-left: -100px;
       padding: 10px 0 10px 10px;
@@ -111,7 +188,7 @@
     }
     #lifelines {
       left: 50%;
-      top: 25px;
+      top: 65px;
       margin-left: 70px;
       height: 150px;
       width: 80px;
@@ -125,32 +202,32 @@
       border-width: 2px;
     }
     #question {
-      top: 200px;
+      top: 240px;
       height: 70px;
     }
     .answerContainer {
       height: 30px;
     }
     #answer1 {
-      top: 290px;
+      top: 340px;
     }
     #answer2 {
-      top: 335px;
+      top: 385px;
     }
     #answer3 {
-      top: 380px;
+      top: 430px;
     }
     #answer4 {
-      top: 425px;
+      top: 475px;
     }
     #timer {
-      top: 20px;
+      top: 50px;
       left: 50%;
       margin-left: -90px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 55px;
+      font-size: 65px;
       width: 150px;
       height: 150px;
       border: 6px solid #fff;
@@ -208,9 +285,11 @@
 <body>
   <section id="game">
     <div id="splashScreen" class="screen">
-      <button id="startGame">Play game</button>
+      <h1>Oratorical millionaire</h1>
+      <button id="startGame" class="button">Play game</button>
     </div>
     <div id="mcq" class="screen">
+      <div class="level"></div>
       <div id="flash">
         <div id="closeMessage">X</div>
         <h1 id="flashedMessage"></h1>
@@ -273,22 +352,25 @@
     </div>
     <div id="answer" class="screen">
       <div class="level"></div>
-      <div id="result"></div>
-      <button id="continue">
-        continue
+      <div class="image"></div>
+      <h1 id="result"></h1>
+      <button id="continue" class="button">
+        Continue
       </button>
     </div>
     <div id="win" class="screen">
       <div class="level"></div>
-      <h1>You win!</h1>
-      <button class="playAgain">
+      <div class="image"></div>
+      <h1>Winner!</h1>
+      <button class="playAgain button">
         Play again
       </button>
     </div>
     <div id="lose" class="screen">
       <div class="level"></div>
+      <div class="image"></div>
       <h1>You lose :(</h1>
-      <button class="playAgain">
+      <button class="playAgain button">
         Play again
       </button>
     </div>
@@ -538,6 +620,7 @@
       currentQuestion: 0,
       canContinue: true,
       showScreen(screenId) {
+        game.updateLevel();
         document.querySelectorAll(".screen").forEach(function(el) {
           el.style.display = "none";
         });
@@ -584,10 +667,8 @@
       },
       updateLevel() {
         let messages = {
-          1: "Level 1: Novice",
-          2: "Level 2: Learner",
-          3: "Level 3: Expert",
-          4: "Level 4: Master"
+          1: "Level 1: Silent Speaker",
+          2: "Level 2: Master Orator"
         };
         document.querySelectorAll(".level").forEach(function(el) {
           el.innerText = messages[game.currentQuestion];
@@ -595,7 +676,7 @@
       },
       attemptAnswer(a) {
         const answer = qna.attempt(game.currentQuestion, a);
-        game.updateLevel();
+        // game.updateLevel();
         let response = "";
         if (a === "t") {
           response = "Time's up! That answer is " +
@@ -605,16 +686,21 @@
           game.showScreen("#answer");
         } else {
           timer.stopped = true;
+          let responseContainer = document.querySelector("#answer");
           if (answer["correct"]) {
             response = "That's right! That answer is " +
               answer["rightAnswer"] + "!"
             document.querySelector("#result").innerText = response;
+            responseContainer.classList.add("correct");
+            responseContainer.classList.remove("wrong");
             game.canContinue = true;
             game.showScreen("#answer");
           } else {
             response = "That's wrong! That answer is " +
               answer["rightAnswer"] + "."
             document.querySelector("#result").innerText = response;
+            responseContainer.classList.remove("correct");
+            responseContainer.classList.add("wrong");
             game.canContinue = false;
             game.showScreen("#answer");
           }
