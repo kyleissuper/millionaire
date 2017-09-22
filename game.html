@@ -69,10 +69,10 @@
     .barContainer {
       display: inline-block;
       width: 140px;
-      height: 20px;
+      height: 15px;
     }
     .bar {
-      background: #f00;
+      background: #dd008f;
       width: 90%;
       height: 100%;
     }
@@ -95,9 +95,18 @@
     }
     /* Game elements */
     #audienceResults {
-      top: 50px;
-      width: 200px;
-      height: 100px;
+      top: 40px;
+      left: 50%;
+      margin-left: -100px;
+      padding: 10px 0 10px 10px;
+      width: 170px;
+      z-index: 1;
+      border: none;
+    }
+    #audienceResults > div {
+      display: flex;
+      height: 25px;
+      align-items: center;
     }
     #lifelines {
       left: 50%;
