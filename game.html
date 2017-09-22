@@ -4,7 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Helvetica, Arial, sans-serif;
+      font-weight: bold;
       text-align: center;
       background: #000;
       color: #fff;
@@ -21,12 +22,23 @@
     #answer3,
     #answer4,
     #question,
+    #timer,
     #lifelines,
     #audienceResults {
       position: absolute;
       display: block;
     }
-    /* Position elements */
+    #answer1,
+    #answer2,
+    #answer3,
+    #answer4,
+    #question,
+    #lifelines > div,
+    #audienceResults {
+      border: 3px solid #fff;
+      background: #203497;
+    }
+    /* Game elements */
     #audienceResults {
       top: 50px;
       width: 200px;
@@ -39,8 +51,26 @@
       height: 200px;
       width: 80px;
     }
+    #question,
+    #answer1,
+    #answer2,
+    #answer3,
+    #answer4 {
+      width: 270px;
+      padding: 0 15px;
+      display: flex;
+      align-items: center;
+      border-width: 2px;
+    }
     #question {
       top: 210px;
+      height: 70px;
+    }
+    #answer1,
+    #answer2,
+    #answer3,
+    #answer4 {
+      height: 30px;
     }
     #answer1 {
       top: 280px;
@@ -71,8 +101,7 @@
     }
     .letter {
       display: inline-block;
-      width: 30px;
-      height: 20px;
+      color: #d89100;
     }
     .barContainer {
       display: inline-block;
