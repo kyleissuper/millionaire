@@ -7,12 +7,52 @@
       font-family: sans-serif;
       text-align: center;
     }
-    .screen {
+    /* Hide */
+    .screen,
+    #flash,
+    #audienceResults {
       display: none;
     }
-    #flash {
-      display: none;
+    /* Set visible game 'components' as blocks */
+    #answer1,
+    #answer2,
+    #answer3,
+    #answer4,
+    #question,
+    #lifelines,
+    #audienceResults {
+      position: absolute;
+      display: block;
     }
+    /* Position elements */
+    #audienceResults {
+      top: 50px;
+      width: 200px;
+      height: 100px;
+    }
+    #lifelines {
+      left: 50%;
+      top: 10px;
+      margin-left: 70px;
+      height: 200px;
+      width: 80px;
+    }
+    #question {
+      top: 210px;
+    }
+    #answer1 {
+      top: 280px;
+    }
+    #answer2 {
+      top: 310px;
+    }
+    #answer3 {
+      top: 340px;
+    }
+    #answer4 {
+      top: 370px;
+    }
+    /* Game */
     #game {
       display: inline-block;
       text-align: left;
@@ -26,13 +66,6 @@
       display: block;
       width: 300px;
       height: 500px;
-    }
-    #audienceResults {
-      top: 300px;
-      left: 0;
-      display: none;
-      width: 200px;
-      height: 200px;
     }
     .letter {
       display: inline-block;
