@@ -21,6 +21,7 @@
     .answerContainer,
     button {
       cursor: pointer;
+      outline: none;
     }
     /* Hide */
     .screen,
@@ -33,13 +34,14 @@
     #question,
     #timer,
     #lifelines,
+    .lifeline,
     #audienceResults {
       position: absolute;
       display: block;
     }
     .answerContainer,
     #question,
-    #lifelines > div,
+    .lifeline,
     #audienceResults {
       border: 3px solid #fff;
       background: #203497;
@@ -81,17 +83,15 @@
       color: #fff;
     }
     .darken {
-      background: #0f2174;
+      background: #0a1855;
     }
     .darken .answer {
       display: none;
     }
-    .suggest {
+    .answerContainer.suggest {
+      border-width: 4px;
       border-color: #d89100;
-    }
-    .eliminated {
-      background: #111;
-      cursor: default;
+      padding: 0px 13px;
     }
     /* Game elements */
     #audienceResults {
@@ -101,9 +101,9 @@
     }
     #lifelines {
       left: 50%;
-      top: 10px;
+      top: 25px;
       margin-left: 70px;
-      height: 200px;
+      height: 150px;
       width: 80px;
     }
     #question,
@@ -136,19 +136,62 @@
     #timer {
       top: 20px;
       left: 50%;
-      margin-left: -100px;
+      margin-left: -90px;
       display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 55px;
       width: 150px;
       height: 150px;
       border: 6px solid #fff;
       border-radius: 78px;
-      align-items: center;
-      justify-content: center;
     }
     #timer.stopped {
       border-color: #333;
       color: #333;
+    }
+    .lifeline {
+      width: 40px;
+      height: 40px;
+      color: #fff;
+      right: 0;
+      background: #203497;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lifeline:hover {
+      background: #d89100;
+    }
+    .lifeline.eliminated,
+    .lifeline.eliminated:hover {
+      background: #0a1855;
+      cursor: default;
+    }
+    .lifeline.eliminated::after {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 50%;
+      left: 50%;
+      margin-left: -25px;
+      margin-top: -25px;
+      width: 50px;
+      height: 50px;
+      font-size: 50px;
+      content: "X";
+      color: #ec3217;
+    }
+    #fifty {
+      top: 0;
+    }
+    #phone {
+      top: 50px;
+    }
+    #audience {
+      top: 100px;
     }
   </style>
 </head>
@@ -193,7 +236,7 @@
           50/50
         </button>
         <button id="phone" class="lifeline">
-          Phone a friend
+          Phone friend
         </button>
         <button id="audience" class="lifeline">
           Audience
@@ -404,6 +447,7 @@
       },
       useFifty() {
         lifelines.avail.fifty = false;
+        document.querySelector("#timer").classList.add("stopped");
         document.querySelector("#fifty").classList.add("eliminated");
         document.querySelector("#fifty").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
@@ -423,6 +467,7 @@
       },
       usePhone() {
         lifelines.avail.phone = false;
+        document.querySelector("#timer").classList.add("stopped");
         document.querySelector("#phone").classList.add("eliminated");
         document.querySelector("#phone").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
@@ -447,6 +492,7 @@
           return rand / 6;
         }
         lifelines.avail.audience = false;
+        document.querySelector("#timer").classList.add("stopped");
         document.querySelector("#audience").classList.add("eliminated");
         document.querySelector("#audience").removeEventListener("click", lifelines.clickHandler);
         timer.stopped = true;
