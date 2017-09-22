@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://use.fontawesome.com/2130fa2272.js"></script>
   <style>
     body {
       font-family: Helvetica, Arial, sans-serif;
@@ -245,10 +246,10 @@
           50/50
         </button>
         <button id="phone" class="lifeline">
-          Phone friend
+          <i class="fa fa-phone" aria-hidden="true" style="font-size:20px"></i>
         </button>
         <button id="audience" class="lifeline">
-          Audience
+          <i class="fa fa-users" aria-hidden="true" style="font-size:20px"></i>
         </button>
       </div>
       <div id="question"></div>
@@ -426,6 +427,17 @@
         });
       },
       clickHandler(evt) {
+        switch (evt.target.parentElement.id) {
+          case "fifty":
+            lifelines.useFifty();
+            break;
+          case "phone":
+            lifelines.usePhone();
+            break;
+          case "audience":
+            lifelines.useAudience();
+            break;
+        }
         switch (evt.target.id) {
           case "fifty":
             lifelines.useFifty();
