@@ -765,12 +765,13 @@
         document.querySelector("#timer").classList.remove("stopped");
         timer.clearCounters();
         let countDown = setInterval(function() {
-          if (timer.t === 0 || timer.stopped) {
+          if (timer.stopped) {
             timer.clearCounters();
             document.querySelector("#timer").classList.add("stopped");
-            if (timer.t === 0) {
-              callback("t");
-            }
+          } else if (timer.t === 0) {
+            timer.clearCounters();
+            document.querySelector("#timer").classList.add("stopped");
+            callback("t");
           } else {
             document.querySelector("#timer").innerText = timer.t;
             timer.t--;
