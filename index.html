@@ -9,6 +9,7 @@
     body * {
       transition: 
         opacity 0.1s ease,
+        color 0.1s ease,
         background-color 0.1s ease,
         width 0.1s ease;
     }
@@ -40,6 +41,7 @@
       bottom: 10px;
       font-weight: normal;
       text-decoration: underline;
+      opacity: 0;
     }
     /* Image backgrounds */
     .image {
@@ -138,12 +140,9 @@
       outline: none;
     }
     /* Hide */
-    .hide {
-      opacity: 0 !important;
-      top: 0;
-      z-index: -1;
-      overflow: hidden;
-      /*display: none !important;*/
+    .show {
+      z-index: 0 !important;
+      opacity: 1 !important;
     }
     /* Win/lose styles */
     .image {
@@ -197,6 +196,8 @@
       margin-left: -150px;
       width: 300px;
       height: 500px;
+      opacity: 0;
+      z-index: -1;
     }
     .letter {
       display: inline-block;
@@ -950,22 +951,21 @@
     const game = {
       init() {
         this.attachListeners();
-        game.showScreen("#splashScreen");
+        window.setTimeout(function(evt) {
+          game.showScreen("#splashScreen");
+        }, 500);
+        window.setTimeout(function(evt) {
+          document.querySelector("#copyright").style.opacity = 1;
+        }, 1500);
       },
       currentQuestion: 0,
       canContinue: true,
       showScreen(screenId) {
         game.updateLevel();
         document.querySelectorAll(".screen").forEach(function(el) {
-          el.classList.add("hide");
-          //el.classList.remove("show");
-          //el.style.display = "none";
-          //el.style.opacity = 0;
+          el.classList.remove("show");
         });
-        document.querySelector(screenId).classList.remove("hide");
-        //document.querySelector(screenId).classList.add("show");
-        //document.querySelector(screenId).style.display = "block";
-        //document.querySelector(screenId).style.opacity = 1;
+        document.querySelector(screenId).classList.add("show");
       },
       loadQuestion(q) {
         lifelines.refreshScreen();
