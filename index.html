@@ -52,7 +52,9 @@
     /* Buttons */
     .button {
       background-color: #203598;
-      border: 2px solid #fff;
+      border-radius: 5px;
+      border: none;
+      /*border: 2px solid #fff;*/
       color: #fff;
       padding: 10px 22px;
       text-align: center;
@@ -66,7 +68,6 @@
       background: #d89100;
     }
     /* Shadows */
-    #splashScreen h1,
     #timer {
       box-shadow: 0 0 8px 0 rgba(66, 199, 255, 0.5), 0 0 20px 0 rgba(66, 199, 255, 0.5);
       text-shadow: 0 0 10px rgba(66, 199, 255, 0.5), 0 0 10px rgba(66, 199, 255, 0.5), 0 0 10px rgba(66, 199, 255, 0.5);
@@ -84,15 +85,22 @@
       align-items: center;
       justify-content: center;
       text-transform: uppercase;
-      width: 250px;
-      height: 250px;
+      width: 235px;
+      height: 235px;
       border-radius: 150px;
-      border: 20px solid #38004d;
+      border: 20px solid #ffd04e;
+      /*border: 20px solid #37044d;*/
       background: #1c153a;
       background-image: url("splash.png");
       background-position: center center;
-      text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-      font-size: 40px;
+      text-shadow:
+        0 0 30px #000,
+        0 0 30px #000,
+        0 0 30px #000,
+        0 0 30px #000,
+        0 0 30px #000;
+      /*text-shadow: -5px 0 black, 0 5px black, 5px 0 black, 0 -5px black;*/
+      font-size: 50px;
     }
     /* Other elements */
     #answer .correct {
@@ -102,10 +110,8 @@
       color: #d89100;
     }
     .level {
-      background-color: #d89100;
       text-transform: uppercase;
       width: 100%;
-      color: #000;
       text-align: center;
       text-decoration: none;
       display: inline-block;
@@ -125,6 +131,9 @@
       display: none;
     }
     /* Win/lose styles */
+    .image {
+      margin-top: 10px;
+    }
     #win h1 {
       text-shadow: 0 0 15px #fffcad;
     }
@@ -151,8 +160,10 @@
     #question,
     .lifeline,
     #audienceResults {
-      border: 3px solid #fff;
+      border: none;
+      /*border: 3px solid #fff;*/
       background: #203497;
+      border-radius: 5px;
     }
     /* Game */
     #game {
@@ -172,6 +183,7 @@
       display: inline-block;
       color: #d89100;
       padding-right: 5px;
+      min-width: 12px;
     }
     .barContainer {
       display: inline-block;
@@ -192,13 +204,13 @@
     .darken {
       background: #0a1855;
     }
+    .darken .letter,
     .darken .answer {
       display: none;
     }
     .answerContainer.suggest {
-      border-width: 4px;
-      border-color: #d89100;
-      padding: 5px 13px;
+      border: 3px solid #d89100;
+      padding: 4px 12px;
     }
     /* Game elements */
     #audienceResults {
