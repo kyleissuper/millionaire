@@ -6,6 +6,12 @@
   <script src="https://use.fontawesome.com/2130fa2272.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet">
   <style>
+    body * {
+      transition: 
+        opacity 0.1s ease,
+        background-color 0.1s ease,
+        width 0.1s ease;
+    }
     body, button {
       font-family: 'Cabin', Helvetica, Arial, sans-serif;
     }
@@ -131,10 +137,12 @@
       outline: none;
     }
     /* Hide */
-    .screen,
-    #flash,
-    #audienceResults {
-      display: none;
+    .hide {
+      opacity: 0 !important;
+      top: 0;
+      z-index: -1;
+      overflow: hidden;
+      /*display: none !important;*/
     }
     /* Win/lose styles */
     .image {
@@ -161,6 +169,7 @@
     #audienceResults {
       position: absolute;
       display: block;
+      opacity: 1;
     }
     .answerContainer,
     #question,
@@ -179,9 +188,12 @@
       height: 500px;
     }
     .screen {
-      top: 0;
-      left: 0;
+      position: absolute;
       display: block;
+      opacity: 1;
+      top: 0;
+      left: 50%;
+      margin-left: -150px;
       width: 300px;
       height: 500px;
     }
@@ -198,7 +210,7 @@
     }
     .bar {
       background: #dd008f;
-      width: 90%;
+      width: 0;
       height: 100%;
     }
     .answerContainer:hover {
@@ -220,6 +232,7 @@
     }
     /* Game elements */
     #audienceResults {
+      opacity: 0;
       top: 70px;
       left: 50%;
       margin-left: -100px;
@@ -337,10 +350,10 @@
     </div>
     <div id="mcq" class="screen">
       <div class="level"></div>
-      <div id="flash">
+      <!--div id="flash">
         <div id="closeMessage">X</div>
         <h1 id="flashedMessage"></h1>
-      </div>
+      </div-->
       <div id="audienceResults">
         <div id="audience1">
           <span class="letter">A</span>
@@ -854,7 +867,7 @@
         }
       },
       refreshScreen() {
-        document.querySelector("#audienceResults").style.display = "none";
+        document.querySelector("#audienceResults").style.opacity = 0;
         ["fifty", "phone", "audience"].forEach(function(li) {
           let el = document.querySelector("#"+li);
           if (lifelines.avail[li]) {
@@ -929,7 +942,7 @@
           document.querySelector(
             "#audience" + (i+1) + " .bar").style.width = Math.round(percent * 100) + "%";
         }
-        document.querySelector("#audienceResults").style.display = "block";
+        document.querySelector("#audienceResults").style.opacity = 1;
         game.flashMessage("audience", "These are the audience results!");
       }
     };
@@ -943,9 +956,15 @@
       showScreen(screenId) {
         game.updateLevel();
         document.querySelectorAll(".screen").forEach(function(el) {
-          el.style.display = "none";
+          el.classList.add("hide");
+          //el.classList.remove("show");
+          //el.style.display = "none";
+          //el.style.opacity = 0;
         });
-        document.querySelector(screenId).style.display = "block";
+        document.querySelector(screenId).classList.remove("hide");
+        //document.querySelector(screenId).classList.add("show");
+        //document.querySelector(screenId).style.display = "block";
+        //document.querySelector(screenId).style.opacity = 1;
       },
       loadQuestion(q) {
         lifelines.refreshScreen();
