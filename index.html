@@ -1021,7 +1021,7 @@
         // game.updateLevel();
         let response = "";
         if (a === "t") {
-          response = "Time's up! That answer is " +
+          response = "Time's up! The correct answer was " +
             answer["rightAnswer"] + "!"
           document.querySelector("#result").innerText = response;
           game.canContinue = false;
@@ -1030,7 +1030,7 @@
           timer.stopped = true;
           let responseContainer = document.querySelector("#answer");
           if (answer["correct"]) {
-            response = "That's right! That answer is " +
+            response = "That's right! It was " +
               answer["rightAnswer"] + "!"
             document.querySelector("#result").innerText = response;
             responseContainer.classList.add("correct");
@@ -1038,7 +1038,7 @@
             game.canContinue = true;
             game.showScreen("#answer");
           } else {
-            response = "That's wrong! That answer is " +
+            response = "That's wrong! The correct answer was " +
               answer["rightAnswer"] + "."
             document.querySelector("#result").innerText = response;
             responseContainer.classList.remove("correct");
