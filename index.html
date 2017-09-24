@@ -1044,15 +1044,17 @@
         const answer = qna.attempt(game.currentQuestion, a);
         // game.updateLevel();
         let response = "";
+        let responseContainer = document.querySelector("#answer");
         if (a === "t") {
           response = "Time's up! The correct answer was " +
             answer["rightAnswer"] + "!"
           document.querySelector("#result").innerText = response;
           game.canContinue = false;
+          responseContainer.classList.add("wrong");
+          responseContainer.classList.remove("correct");
           game.showScreen("#answer");
         } else {
           timer.stopped = true;
-          let responseContainer = document.querySelector("#answer");
           if (answer["correct"]) {
             response = "That's right! It was " +
               answer["rightAnswer"] + "!"
